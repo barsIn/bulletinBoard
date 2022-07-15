@@ -17,13 +17,14 @@ class Advertisement(models.Model):
     ]
 
     heading = models.CharField(max_length=64)
-    text = RichTextUploadingField
+    text = RichTextUploadingField()
     publication_date = models.DateTimeField(auto_now_add=True)
     changepublication_date = models.DateTimeField(auto_now=True)
     category = models.CharField(max_length=2,
                                 choices=CATEGORY_CHOICES)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Author')
     rating = models.IntegerField(default=0)
+
     # responses = models.ForeignKey('Response', on_delete=models.CASCADE, related_name='Отклики')
 
     class Meta():

@@ -5,7 +5,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class AdvertisementAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorUploadingWidget())
+    text = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = Advertisement
