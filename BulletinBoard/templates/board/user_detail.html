@@ -2,13 +2,16 @@
 {% load board_tags %}
 
 {% block title %} {{ user.username }} {% endblock title %}
-{% block front %} {{ user.username }} {% endblock front %}
+{% block front %} <form method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+         </form> {% endblock front %}
 {% block content %}
 
 {% get_userpost_list user=user as posts %}
 
 {% if posts %}
-{% for post in posts %}
+{% for post in filter.qs %}
 По объявлению {{ post.heading }} {%get_my_responses adv=post%} откликов
 <div class="card mb-1">
     {% get_my_responses_list adv=post as resp%}
@@ -28,7 +31,7 @@
 
         {% endif %}
         <button onclick="window.location.href = '{% url 'delete_resp' res.id%}';">Отказаться</button>
-    
+
 
     </div>
     {% endfor %}

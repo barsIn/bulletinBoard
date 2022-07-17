@@ -5,9 +5,10 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, request
 from .models import Advertisement, Response, User
 from django.views.generic.base import View
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from .forms import AdvCreateForm, RespCreateForm
+from .filters import AdvertisementFilter
 from django.contrib.auth.decorators import login_required
 
 
@@ -93,10 +94,41 @@ class AdvDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
-class UserDetailView(DetailView):
-    model = User
+# class UserDetailView(DetailView):
+#     model = User
+#     template_name = 'board/user_detail.html'
+#     context_object_name = 'user'
+
+
+class UserDetailView(ListView):
+    model = Advertisement
     template_name = 'board/user_detail.html'
-    context_object_name = 'user'
+    context_object_name = 'adv'
+    def get_filter(self):
+        return AdvertisementFilter(self.request.GET, queryset=super().get_queryset())
+
+    def get_queryset(self):
+        return self.get_filter().qs
+
+    def get_context_data(self, *args, **kwargs):
+        return {
+            **super().get_context_data(*args, **kwargs),
+            'filter': self.get_filter(),
+        }
+
+
+    def get_filter(self):
+        return AdvertisementFilter(self.request.GET, queryset=super().get_queryset())
+
+    def get_queryset(self):
+        return self.get_filter().qs
+
+    def get_context_data(self, *args, **kwargs):
+        return {
+            **super().get_context_data(*args, **kwargs),
+            'filter': self.get_filter(),
+        }
+
 
 @login_required()
 def confirm_resp(request, id):
