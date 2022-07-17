@@ -1,0 +1,21 @@
+{% extends 'board/default.html' %}
+
+
+{% block title %} {{ adv.title }} {% endblock title %}
+
+
+{% block front %}
+Удаление Объявления
+{% endblock front %}
+{% block content %}
+
+
+<h3>{{adv.heading}}</h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value='Редактирование Объявления'>
+</form>
+
+
+{% endblock content %}

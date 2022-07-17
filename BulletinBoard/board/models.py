@@ -16,19 +16,20 @@ class Advertisement(models.Model):
         ('SM', 'Spell Masters'),
     ]
 
-    heading = models.CharField(max_length=64)
-    text = RichTextUploadingField()
+    heading = models.CharField(max_length=64, verbose_name="Заголовок")
+    text = RichTextUploadingField(verbose_name="Текст объявления")
     publication_date = models.DateTimeField(auto_now_add=True)
     changepublication_date = models.DateTimeField(auto_now=True)
     category = models.CharField(max_length=2,
-                                choices=CATEGORY_CHOICES)
+                                choices=CATEGORY_CHOICES,
+                                verbose_name="Категория")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Author')
-    rating = models.IntegerField(default=0)
+    rating = models.IntegerField(default=0, verbose_name="рейтинг")
 
     # responses = models.ForeignKey('Response', on_delete=models.CASCADE, related_name='Отклики')
 
     class Meta():
-        ordering = ['publication_date', '-changepublication_date']
+        ordering = ['-publication_date', '-changepublication_date']
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
 
@@ -39,11 +40,12 @@ class Advertisement(models.Model):
         return f'/adv/{self.id}'
 
 class Response(models.Model):
-    tekst = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='responseUser')
-    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name='advertisement')
+    tekst = models.TextField(verbose_name='Текст отклика')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='responseUser', verbose_name='Пользователь')
+    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name='advertisement', verbose_name='Объявление')
     publication_date = models.DateTimeField(auto_now_add=True)
     changepublication_date = models.DateTimeField(auto_now=True)
+    is_confirm = models.BooleanField(default=False)
 
     class Meta():
         ordering = ['publication_date', '-changepublication_date']

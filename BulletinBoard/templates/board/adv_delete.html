@@ -1,0 +1,66 @@
+{% extends 'board/default.html' %}
+
+
+{% block title %} {{ adv.title }} {% endblock title %}
+{% block front %} {{ adv.title }} {% endblock front %}
+
+{% block front %}
+Удаление Новости
+{% endblock front %}
+{% block content %}
+
+<div class="container mt-3">
+  <div class="card mb-3">
+    <div class="card-header">
+    <ul class="nav nav-pills card-header-pills">
+      <li class="nav-item">
+
+        {% if user.is_authenticated %}
+        <a class="nav-link " href="{% url 'adv_update' adv.pk%}">Редактировать</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'adv_delete' adv.pk %}">Удалить</a>
+
+        {% endif %}
+    </ul>
+  </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ adv.heading }}</h5>
+      <p class="card-text">{{adv.text | safe }}</p>
+
+    </div>
+    <div class="card-footer text-muted">
+      {{ adv.publication_date|date:'d.m.Y H:i' }}   Рейтинг: {{  adv.rating }}
+      {% if user.is_authenticated %}
+
+      {% endif  %}
+
+
+    </div>
+  </div>
+  <div class="card mb-1">
+    {% get_my_responses_list adv=adv as resp%}
+    {% if resp|length %}
+    {% for res in resp %}
+      <h4 class="card-header">{{ res.user.username }}</h4>
+    <div class="card-body">
+
+      <p class="card-text">{{ res.tekst }}</p>
+
+    </div>
+    <div class="card-footer text-muted">
+      {{ res.publication_date|date:'d.m.Y H:i' }}
+
+
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить">
+</form>
+
+
+{% endblock content %}

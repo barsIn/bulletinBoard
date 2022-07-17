@@ -1,0 +1,44 @@
+{% extends 'board/default.html' %}
+{% load board_tags %}
+
+{% block title %} {{ user.username }} {% endblock title %}
+{% block front %} {{ user.username }} {% endblock front %}
+{% block content %}
+
+{% get_userpost_list user=user as posts %}
+
+{% if posts %}
+{% for post in posts %}
+По объявлению {{ post.heading }} {%get_my_responses adv=post%} откликов
+<div class="card mb-1">
+    {% get_my_responses_list adv=post as resp%}
+    {% if resp|length %}
+    {% for res in resp %}
+
+      <h4 class="card-header">{{ res.user.username }}</h4>
+    <div class="card-body">
+
+      <p class="card-text">{{ res.tekst }}</p>
+
+    </div>
+    <div class="card-footer text-muted">
+      {{ res.publication_date|date:'d.m.Y H:i' }}
+        {% if not res.is_confirm %}
+        <button onclick="window.location.href = '{% url 'confirm_resp' res.id%}';">Согласиться</button>
+
+        {% endif %}
+        <button onclick="window.location.href = '{% url 'delete_resp' res.id%}';">Отказаться</button>
+    
+
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+{% endfor %}
+
+{% endif %}
+
+
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'board/default.html' %}
+{% load board_tags %}
+
+{% block title %} Объявления {% endblock title %}
+{% block front %} Все Объявления {% endblock front %}
+{% block content %}
+{% for adv in adv_list %}
+<div class="container mt-3">
+  <div class="card mb-3">
+    <h5 class="card-header">{{ adv.get_category_display }}</h5>
+    <div class="card-body">
+      <h5 class="card-title">{{ adv.heading }}</h5>
+      <p class="card-text">{{adv.text | safe |truncatewords:30}}</p>
+      <a href="{% url 'adv_detail' adv.pk %}" class="btn btn-primary">Читать полностью</a>
+    </div>
+    <div class="card-footer text-muted">
+      {{ adv.publication_date|date:'d.m.Y H:i' }}   Рейтинг: {{  adv.rating }}
+      Откликов:
+      {% get_my_responses adv=adv %}
+
+    </div>
+  </div>
+</div>
+
+
+{% endfor %}
+{% endblock content %}
