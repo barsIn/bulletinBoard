@@ -107,13 +107,13 @@ def confirm_resp(request, id):
      adv = resp.advertisement.heading
      id = request.user.id
 
-     # send_mail(
-     #     'Подтвержден ваш отклик на объявление',
-     #     f'Подтвержден ваш отклик на объявление {adv}',
-     #     f"{os.getenv('MY_MAIL')}",
-     #     [f'{author.email}'],
-     #     fail_silently=False,
-     # )
+     send_mail(
+         'Подтвержден ваш отклик на объявление',
+         f'Подтвержден ваш отклик на объявление {adv}',
+         f"{os.getenv('MY_MAIL')}",
+         [f'{author.email}'],
+         fail_silently=False,
+     )
      return redirect(f'/user/{id}')
 
 @login_required()
